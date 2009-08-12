@@ -1,0 +1,158 @@
+<% content_for :head do %>
+	<script type="text/javascript">
+	<!--
+	//on page load
+	$(document).ready(function() {
+	    $("#list_of_bands").change(function() {
+	        var val = $(this).val();
+	        if (val != '') {
+	            location.href=val;
+	        }
+	    });
+			$("#list_of_people").change(function() {
+	        var val = $(this).val();
+	        if (val != '') {
+	            location.href=val;
+	        }
+	    });
+	});
+	-->
+	</script>
+<% end %>
+<% content_for :sidebar_left do %>
+	<%= render :partial => "shared/bands_sidebar",  :locals => { :products => @products, :taxon => @taxon } %>
+	
+<% end %>
+
+<% content_for :page_title do %>
+	<%= @site_page.page_title rescue 'Photo Gallery' %>
+<% end %>
+
+
+<img src="/images/site/peeps_in_shirts_header.png" />
+<% if params[:product_id] %>
+	  <%= link_to image_tag('/images/site/submit_a_photo.png'), new_product_submission_url(@product), :class=>'submit_photo' %>
+<% else %>
+	  <%= link_to image_tag('/images/site/submit_a_photo.png'), new_submission_url, :class=>'submit_photo' %>
+<% end %>
+
+<div id="gallery_filters">
+	<div id="bands_wrapper" class="left">	
+		<form method="get" action="submissions">
+			<select id="list_of_bands" name="list_of_bands">
+				<option value="submissions">Bands</option>
+			<% MetaData.band.each do |band| %>
+				<option value="<%= product_submissions_url(band.taxon.products.first) rescue '' %>"><%= band.taxon.name rescue '' %></option>
+			<% end %>
+			</select>
+		</form>
+	</div>
+
+
+
+	<div id="list_of_peeps" class="left">
+		<div id="peeps_wrapper">
+			<form method="get" action="submissions">
+				<select id="list_of_people" name="list_of_people">
+					<option value="submissions">Peeps</option>
+					<% UserProfile.all.each do |peep| %>
+						<% if user_profile_submissions_url(peep) and !peep.name.blank? and !peep.user.submissions.empty? %>
+							<option value="<%= user_profile_submissions_url(peep) rescue '' %>"><%= link_to peep.name rescue ''%></option>
+						<% end %>
+					<% end %>
+				</select>
+			</form>
+		</div>
+	</div>
+</div>
+<% if params[:product_id] %>
+ 	<p class="photo_category">
+		Photos of <%= params[:product_id].titleize %>
+	</p>
+<% end %>
+<% if params[:user_profile_id] and UserProfile.find_by_permalink(params[:user_profile_id]) %>
+	<div class="photo_by_user">
+		<p class="avatar_gallery">
+			<%= image_tag(UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.avatar.url(:thumb)) if !UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.nil? %>
+		</p>
+		<p class="name">
+			Photos by <%= link_to UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.name, user_profile_submissions_url(UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile) if !UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.nil? %><span> <%= "from #{UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.hometown}" unless UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.hometown.blank? %></span>
+		</p>
+		<p class="blurb">
+			<%= UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.photo_gallery_intro if !UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.nil? %>
+		</p>
+		<% if !UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.website.blank? || 
+					!UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.blurb.blank? || 		
+					!UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.save_the_world_plan.blank? || 
+					!UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.favorite_band.blank? || 
+					!UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.favorite_song.blank? %>
+		<div class="subinfo">
+			<% if !UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.website.blank? %>
+				<p>
+					<strong>My website:</strong> <%= auto_link(UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.website, :html =>  { :target => '_blank' }) %>
+				</p>
+			<% end %>
+			<% if !UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.blurb.blank? %>
+				<p>
+					<strong>Random blurb:</strong> <%= UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.blurb %>
+				</p>
+			<% end %>
+		
+			<% if !UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.save_the_world_plan.blank? %>
+				<p>
+					<strong>How I plan to save the world:</strong> <%= UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.save_the_world_plan %>
+				</p>
+			<% end %>
+		
+			<% if !UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.favorite_band.blank? %>
+				<p>
+					<strong>My favorite band:</strong> <%= UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.favorite_band %>
+				</p>
+			<% end %>
+		
+			<% if !UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.favorite_song.blank? %>
+				<p>
+					<strong>My favorite song:</strong> <%= UserProfile.find_by_permalink(params[:user_profile_id]).user.user_profile.favorite_song %>
+				</p>
+			<% end %>
+		</div>
+		<% end %>
+	</div>
+<% end %>
+
+<% @submissions.each do |submission| %>
+	<%# if submission.user.user_profile %>
+	  <div class="gallery_item" id="<%= dom_id(submission) %>">
+		<% if @filter == 'user' %>
+			<%= link_to(image_tag(submission.image(:thumb)), user_profile_submission_url(params[:user_profile_id], submission)) %><br />
+		<% elsif @filter == 'product' %>
+			<%= link_to(image_tag(submission.image(:thumb)), product_submission_url(params[:product_id], submission)) %><br />
+		<% else %>
+			<%= link_to(image_tag(submission.image(:thumb)), submission_url(submission)) %><br />
+		<% end %>
+		  <%= link_to "by #{submission.user.user_profile.name}", user_profile_submissions_url(submission.user.user_profile) if submission.has_profile_info? %>
+		
+		<%= link_to '(remove image)', submission_url(submission, :authenticity_token => form_authenticity_token), :class => 'remote-delete' if current_user == submission.user %>
+		
+		
+	  </div>
+	<%# end %>
+	
+<% end %>
+
+<div class="clear" style="clear:left;"></div>
+
+<%= will_paginate @submissions %>
+
+
+<% content_for :sidebar_right do %>
+	<%= render :partial => 'shared/dynamic_sidebars' %>
+	<!-- Submit a photo -->
+	<%= link_to image_tag('/images/site/add_a_photo.png'), new_submission_url, :class => 'submit_from_sidebar' %>
+	
+	
+	
+	
+	<%#= render :partial => 'products/photo_gallery_banner' %>
+	<%#= render :partial => "shared/coloring_book" %>
+<% end %>

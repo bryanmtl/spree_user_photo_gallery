@@ -1,0 +1,42 @@
+<h1>Photo Gallery</h1>
+
+<table class="admin-report" width="545">
+	<thead>
+		<tr>
+      		<th>Product</th>
+      		<th>User</th>
+					<th>Image</th>
+					<th>Blurb</th>
+					<th>Active</th>
+					<th></th>
+    	</tr>
+  	</thead>
+	
+	<tbody>
+    	<% @submissions.each do |submission| %>
+		<tr class="<%= cycle('even', 'odd') %>">
+			<td>
+				<%= submission.product.name rescue '' %>
+			</td>
+			<td>
+				<%= submission.user.user_profile.name rescue '' %>
+			</td>
+			<td>
+				<%=h submission.blurb %>
+			</td>
+			<td>
+				<%= image_tag submission.image(:thumb) %>
+			</td>
+			<td>
+				<%= submission.active %>
+			</td>
+			<td>
+	          <%=link_to t("edit"), edit_object_url(submission) %> |
+	          <%=link_to t("delete"), object_url(submission), :method => :delete, :confirm => 'Are you sure' %>
+	        </td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<%= link_to 'New Gallery Image', new_object_url %>

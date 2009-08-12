@@ -1,0 +1,20 @@
+<% if !@submission.user.user_profile.nil? %>
+<% content_for :head do %>
+	<script type="text/javascript">
+		Cufon.replace('#recent_uploads_for_peep h2');
+	</script>
+<% end %>
+
+<div id="recent_uploads_for_peep">
+	<h2>
+		<%= "#{@submission.user.user_profile.name.upcase}'S MOST RECENT UPLOADS" %>
+	</h2>
+
+	<% for submission in @submission.user.recent_uploads %>
+		<%= link_to(image_tag(submission.image.url(:tiny)), user_profile_submission_url(submission.user.user_profile,submission)) %> 
+	<% end %>
+	<div style="clear: left;"></div>
+	<%= link_to('see them all', user_profile_submissions_url(submission.user.user_profile), :class => "see_all") %>
+	<div style="clear: both;"></div>
+</div>
+<% end %>

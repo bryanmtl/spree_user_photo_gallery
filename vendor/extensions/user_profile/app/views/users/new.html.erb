@@ -1,0 +1,33 @@
+<% content_for :head do %>
+	<script type="text/javascript">
+		Cufon.replace('#new-customer h2');
+	</script>
+<% end %>
+<%= error_messages_for :user %>
+
+<% @body_id = 'signup' %>
+
+<% content_for :sidebar_left do %>
+	<%= render :partial => "shared/bands_sidebar",  :locals => { :products => @products, :taxon => @taxon } %>
+<% end %>
+
+<div id="new-customer">
+  <h2><%= t("new_customer").upcase %></h2>
+	<div class="form">
+		<p>
+			Don’t Have a YBP Account Yet? Get to it!
+			<span>...And get started editing your profile and uploading pics.</span>
+		</p><br />
+	  <% form_for(@user) do |f| %>
+	    <%= render :partial => "form", :locals => { :f => f } %>
+	    <p ><%= image_submit_tag '/images/site/continue.png', :class => 'button primary' %></p>
+	  <% end %>
+	  <p class="submit">
+			<%= t("or") %> <%= link_to t("login_as_existing"), login_path %>
+		</p>
+	</div>
+</div>
+
+<% content_for :sidebar_right do %>
+	<%= render :partial => 'shared/dynamic_sidebars' %>
+<% end %>

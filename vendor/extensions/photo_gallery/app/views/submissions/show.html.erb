@@ -1,0 +1,60 @@
+<% content_for :sidebar_left do %>
+	<%= render :partial => "shared/bands_sidebar",  :locals => { :products => @products, :taxon => @taxon } %>
+<% end %>
+
+<% content_for :page_title do %>
+	<%= @site_page.page_title rescue 'Photo Gallery' %>
+<% end %>
+
+		<p class="avatar_gallery">
+			<%= image_tag(@submission.user.user_profile.avatar.url(:thumb)) if !@submission.user.user_profile.nil? %>
+		</p>
+	
+		<% if @submission.has_profile_info? %>
+		<p class="name">
+			<%= link_to @submission.user.user_profile.name, user_profile_submissions_url(@submission.user.user_profile) %><span> <%= "from #{@submission.user.user_profile.hometown}" unless @submission.user.user_profile.hometown.blank? %></span>
+		</p>
+
+		<p class="blurb">
+			<%= h(@submission.user.user_profile.photo_gallery_intro.gsub(/<\/?[^>]*>/, "")) unless @submission.user.user_profile.photo_gallery_intro.blank? %>
+		</p>
+	<% end %>
+	
+	<div class="gallery_pagnation">
+		<%= pluralize(@submissions.size, 'Photo') %> | 
+		<%= render :partial => 'gallery_pagination' %>
+	</div>
+	<% if @submission.product %>
+		<div class="image_title">
+			<%= link_to @submission.product.name, product_submissions_url(@submission.product) %> 
+		</div>
+	<% end %>
+	
+	<%= image_tag(@submission.image.url(:large), :class => 'submitted_image') %>
+	<p class="submission_date">
+		Added <%= @submission.created_at.strftime('%e %b, %y') %>
+	</p>
+	<p class="submission_blurb">
+		<%= @submission.blurb %>
+	</p>
+	<% if @submission.product %>
+		<p class="hook_me_up">
+			<%= link_to "hook me up", product_url(@submission.product) %> with this shirt
+		</p>
+	<% end %>
+<% content_for :sidebar_right do %>
+	
+	<!-- Submit a photo -->
+	<div id="submit_a_photo">
+		<% if params[:product_id] %>
+		  <%= link_to image_tag('/images/site/add_a_photo.png'), new_product_submission_url(params[:product_id]), :class => 'submit_a_photo' %>
+		<% else %>
+		  <%= link_to image_tag('/images/site/add_a_photo.png'), new_submission_url, :class => 'sumbit_a_photo' %>
+		<% end %>
+	</div>
+	<!-- recent uploads -->
+	<%= render :partial => 'shared/recent_uploads_for_peep' %>
+	
+	<%= render :partial => 'shared/dynamic_sidebars' %>
+	
+<% end %>

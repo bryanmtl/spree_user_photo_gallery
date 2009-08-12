@@ -1,0 +1,19 @@
+<% if false #taking the paginated links out for now %>
+	<% @submissions.each_with_index do |submission, i| %>
+		<%= link_to_unless( params[:id].to_i == submission.id, i+1, :action => "show", :id => submission.id) %> 
+	<% end %>
+<% end %>
+	
+	<% current_pos = @submissions.index(@submission) + 1 %>
+	<% next_pos = current_pos == @submissions.size ? @submissions.first : @submissions[current_pos] %>
+	<% prev_pos = current_pos == 1 ? @submissions.last : @submissions[current_pos -2] %>
+	<% if params[:product_id] %>
+	  <%= link_to "Previous", product_submission_url(@product,prev_pos) %>
+		<%= link_to "Next", product_submission_url(@product,next_pos) %>
+	<% elsif params[:user_profile_id] %>
+	  <%= link_to "Previous", user_profile_submission_url(@user_profile,prev_pos) %>
+		<%= link_to "Next", user_profile_submission_url(@user_profile,next_pos) %>
+	<% else %>
+	  <%= link_to "Previous", :action => "show", :id => prev_pos %>
+	  <%= link_to "Next", :action => "show", :id => next_pos %>
+	<% end %>

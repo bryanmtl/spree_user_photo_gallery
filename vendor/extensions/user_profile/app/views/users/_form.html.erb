@@ -1,0 +1,22 @@
+<p>
+  <label for="<%= t("email") %>"><%= t("email") %></label>
+  <%= f.text_field :email, :class => 'title'  %>
+</p>
+
+<p>
+  <label for="<%= t("password") %>"><%= t("password") %></label>
+  <%= f.password_field :password, :class => 'title'  %>
+</p>
+
+<p>
+  <label for="<%= t("password") %>">Confirm Your Password</label>
+  <%= f.password_field :password_confirmation, :class => 'title' %>
+</p>
+<% f.fields_for :user_profile_attributes do |profile_form| %>
+   <p>
+  		<label for="<%= t("nickname") %>"><%= t("nickname") %></label>
+  		<%= profile_form.text_field :name, :class => 'title' -%>
+  	</p>
+
+<% end %>
+<%#= render_extra_partials f %>

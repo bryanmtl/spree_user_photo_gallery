@@ -1,0 +1,85 @@
+<h1>User Profiles</h1>
+
+<h4>These are all the users who have created accounts on the site (this does not include people who have checked out as guests).<br />
+Don't forget, there is also the <i>'Users'</i> page in the admin menu if you want to list all the users who have made purchases regardless of whether they have created accounts.</h4>
+
+<table class="admin-report" width="545">
+	<thead>
+		<tr>
+      		<th></th>
+					<th>User</th>
+					<th>Nickname</th>
+					<th>Name</th>
+					<th>Blurb</th>
+					<th>Website</th>
+					<th>Hometown</th>
+					<th>Birthday</th>
+					<th>Favorite Band</th>
+					<th>Favorite Song</th>
+					<th>World Plan</th>
+					<th>Gender</th>
+					<th>Active?</th>
+					<th>Include in Art Gallery?</th>
+					<th>Photo Gallery Intro</th>
+					<th></th>
+					
+					<th></th>
+    	</tr>
+  	</thead>
+	
+	<tbody>
+    	<% @user_profiles.each do |profile| %>
+		<tr class="<%= cycle('even', 'odd') %>">
+			<td>
+				<%= image_tag(profile.avatar.url(:thumb)) %>
+			</td>
+			<td>
+				<%= link_to profile.user.email, admin_user_url(profile.user) %>
+			</td>
+			<td>
+				<%= profile.name %>
+			</td>
+			<td>
+				<%= profile.fullname %>
+			</td>
+				<td>
+					<%= profile.blurb %>
+				</td>
+				<td>
+					<%= profile.website %>
+				</td>
+			<td>
+				<%=h profile.hometown %>
+			</td>
+			<td>
+				<%=h profile.birthday %>
+			</td>
+			<td>
+				<%=h profile.favorite_band %>
+			</td>
+			<td>
+				<%=h profile.favorite_song %>
+			</td>
+			<td>
+				<%=h profile.save_the_world_plan %>
+			</td>
+			<td>
+				<%= profile.gender %>
+			</td>
+			<td>
+				<%= profile.active %>
+			</td>
+			
+			<td>
+				<%= profile.is_art_gallery_member %>
+			</td>
+			<td><%=h truncate(profile.photo_gallery_intro, 50) %></td>
+			<td>
+	          <%=link_to t("edit"), edit_object_url(profile.id) rescue '' %> |
+	          <%=link_to t("delete"), object_url(profile.id), :method => :delete, :confirm => 'Are you sure' rescue '' %>
+	        </td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+

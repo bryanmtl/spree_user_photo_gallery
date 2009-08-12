@@ -1,0 +1,118 @@
+<%= error_messages_for :user %>
+<% content_for :sidebar_left do %>
+	<%= render :partial => "shared/bands_sidebar",  :locals => { :products => @products, :taxon => @taxon } %>
+<% end %>
+<div id="new_customer">
+<h1 class="form">EDIT YOUR PROFILE</h1>
+<script type="text/javascript">
+	Cufon.replace('h1.form');
+</script>
+
+<div class="generic_form">
+	<% form_for(@user, :html => { :method => :put, :multipart => true }) do |f| %>
+	  <%#= render :partial => "form", :locals => { :f => f } %>
+		<p>
+		  <label for="<%= t("email") %>"><%= t("email") %></label>
+		  <%= f.text_field :email, :class => 'title'  %>
+		</p>
+
+		<p>
+		  <label for="<%= t("password") %>"><%= t("password") %></label>
+		  <%= f.password_field :password, :class => 'title'  %>
+		</p>
+
+		<p>
+		  <label for="<%= t("password") %>"><%= t("confirm") %></label>
+		  <%= f.password_field :password_confirmation, :class => 'title' %>
+		</p>
+		<% @user.build_user_profile unless @user.user_profile %>
+		<% f.fields_for :user_profile do |profile_form| %>
+		    <p>
+		  		<label for="<%= t("nickname") %>"><%= t("nickname") %></label>
+		  		<%= profile_form.text_field :name, :class => 'title' -%>
+		  	</p>
+				<p>
+		  		<label for="<%= t("firstname") %>"><%= t("firstname") %></label>
+		  		<%= profile_form.text_field :firstname, :class => 'title' -%>
+		  	</p>
+				<p>
+		  		<label for="<%= t("lastname") %>"><%= t("lastname") %></label>
+		  		<%= profile_form.text_field :lastname, :class => 'title' -%>
+		  	</p>
+				<p>
+		  		<label for="<%= t("gender") %>"><%= t("gender") %></label>
+		  		<%= profile_form.select :gender, %w(male female), :include_blank => true -%>
+		  	</p>
+					<p>
+			  		<label for="<%= t("website") %>"><%= t("website") %></label>
+			  		<%= profile_form.text_field :website, :class => 'title' -%>
+			  	</p>
+		  	<p>
+		  		<label for="<%= t("random_blurb") %>"><%= t("random_blurb") %></label>
+		  		<%= profile_form.text_field :blurb, :class => 'title' -%>
+		  	</p>
+			
+				<p>
+		  		<label for="<%= t("hometown") %>"><%= t("hometown") %></label>
+		  		<%= profile_form.text_field :hometown, :class => 'title' -%>
+		  	</p>
+				<p>
+		  		<label for="<%= t("birthday") %>"><%= t("birthday") %></label>
+		  		<%= profile_form.date_select(:birthday, {:start_year => Time.now.year - 60, :include_blank => true }, :class => 'title') -%>
+		  	</p>
+				<p>
+		  		<label for="<%= t("fav_band") %>"><%= t("fav_band") %></label>
+		  		<%= profile_form.text_field :favorite_band, :class => 'title' -%>
+		  	</p>
+				<p>
+		  		<label for="<%= t("best_song") %>"><%= t("best_song") %></label>
+		  		<%= profile_form.text_field :favorite_song, :class => 'title' -%>
+		  	</p>
+				<p>
+		  		<label for="<%= t("save_the_world") %>"><%= t("save_the_world") %></label>
+		  		<%= profile_form.text_area :save_the_world_plan, :class => 'title' -%>
+		  	</p>
+				<p>
+		  		<label for="photo_gallery_intro">Photo Gallery Intro</label>
+		  		<%= profile_form.text_area :photo_gallery_intro, :class => 'title' -%>
+		  	</p>
+				<p>
+		  		<label for="<%= t("avatar") %>"><%= t("avatar") %></label>
+		  		<%= profile_form.file_field :avatar, :class => 'title' -%>
+					<span>(60 x 60 pixels)</span>
+		  	</p>
+	
+		<% end %>	
+	
+	  <p>
+	    <%= image_submit_tag '/images/site/continue.png', :class => 'button primary' %>
+	  </p>
+	<% end %>
+</div>
+</div>
+<% content_for :sidebar_right do %>
+	
+	<div id="feedback">
+		<h2>
+			Feedback
+		</h2>
+		<div>
+			<h4>Hit us up</h4>
+			<p>
+				We’d love to hear your feedback on our site, our shirts, anything really.
+			</p>
+			<div id="feedback_form">
+				<% form_tag comments_url, { :id => 'user_feedback' } do -%>
+					<%= text_area_tag 'comment[message]', nil, :cols => 30, :rows => 12 %>
+					<%= hidden_field_tag 'comment[user_id]', @user.id %>
+					<%= submit_tag 'submit' %>
+				<% end %>
+				
+			</div>
+			<div id="feedback_confirmation" style="display:none;">
+				Roger that!
+			</div>
+			
+		</div>
+	</div>
+<% end %>

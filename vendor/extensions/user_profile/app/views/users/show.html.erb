@@ -1,0 +1,132 @@
+<% content_for :head do %>
+	<script type="text/javascript">
+				Cufon.replace('#user_name');
+				$(document).ready(function(){
+				    $("#orders_tabs").tabs({ selected: 0, fxFade: true, fxSpeed: 'fast' });
+				  });
+			</script>
+<% end %>
+
+<% content_for :sidebar_left do %>
+	<%= render :partial => "shared/bands_sidebar",  :locals => { :products => @products, :taxon => @taxon } %>
+<% end %>
+
+<h2 id="user_name">
+	WHAT'S UP <%= @user.user_profile.name.upcase rescue '' %>!?
+</h2>
+<div id="profile">
+	<h2>
+		Profile
+	</h2>
+		<%= link_to "Edit your profile", edit_object_url, :class => 'edit' %>
+	<div id="profile_details">
+ 		<div id="avatar">
+			<%= image_tag(@user.user_profile.avatar(:thumb), :align => :right) rescue '' -%>
+		</div>
+		<span><%= t("nickname") %></span><%= @user.user_profile.name rescue '' %><br />
+		<span><%= t("firstname") %></span><%= @user.user_profile.firstname.blank? ? "<i>not specified</i>" : @user.user_profile.firstname rescue '' %><br />
+		<span><%= t("lastname") %></span><%= @user.user_profile.lastname.blank? ? "<i>not specified</i>" : @user.user_profile.lastname rescue '' %><br />
+		<span><%= t("gender") %></span><%= @user.user_profile.gender.blank? ? "<i>not specified</i>" : @user.user_profile.gender rescue '' %><br />
+  	<span>
+  		<%= t("random_blurb") %></span>
+  		<%= @user.user_profile.blurb rescue '' -%><br />
+		<% if @user.user_profile and !@user.user_profile.website.blank?  %>
+		<span><%= t("website") %></span>
+	  		<%= @user.user_profile.website rescue '' -%><br />
+		<% end %>
+		
+		<span>
+  		<%= t("hometown") %></span>
+  		<%= @user.user_profile.hometown rescue '' -%><br />
+		<span>
+  		<%= t("birthday") %></span>
+  		<%= @user.user_profile.birthday.strftime("%B %d, %Y") rescue '' -%><br />
+		<span>
+  		<%= t("fav_band") %></span>
+  		<%= @user.user_profile.favorite_band rescue '' -%><br />
+		<span>
+  		<%= t("best_song") %></span>
+  		<%= @user.user_profile.favorite_song rescue '' -%><br />
+		<span>
+  		<%= t("save_the_world") %></span>
+  		<%= @user.user_profile.save_the_world_plan rescue '' -%><br />
+</div>
+			<div id="orders_tabs">
+			   <ul>
+			      <li class="pending"><a href="#tabs-1">Pending Orders</a></li>
+			      <li class="shipped"><a href="#tabs-2">Shipped Orders</a></li>
+			      <!-- <li class="completed"><a href="#tabs-3">Completed Orders</a></li> -->
+			   </ul>
+			   <div id="tabs-1">
+ 						<h4>Your Pending Orders</h4>
+				      <%= render :partial => 'order_summary', :locals => { :orders => @pending_orders } %>
+				   </div>
+				   <div id="tabs-2">
+							<h4>Your Shipped Orders</h4>
+				      <%= render :partial => 'shipped_summary', :locals => { :orders => @shipped_orders } %>
+				   </div>
+				   <!-- <div id="tabs-3">
+				   							<h4>Your Completed Orders</h4>
+				   				      <p>Tab 3 content</p>
+				   				   </div> -->
+				</div>
+			</div>
+			<div id="help">
+				<h2>
+					Help!
+				</h2>
+				<div id="faq">
+					<h4>
+						FAQ Top 5
+					</h4>
+					<!-- faq partial -->
+					<%= render :partial => 'faqs/faq_list', :locals => { :questions => Question.find(:all, :limit => 5) } %>
+					
+					<div id="more_help">					
+						<h4>
+							Still need help?
+						</h4>
+						<p>
+							No problem, contact us at <%= mail_to 'info@yellowbirdproject.com' %>
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<% content_for :sidebar_right do %>
+				<% unless @user.user_profile.nil? %>
+					<%= link_to(image_tag("site/add_a_photo.png"), new_user_profile_submission_url(@user.user_profile), :class => 'add_photo') %>
+					<div id="most_recent">
+						<p>
+							<% for submission in @user.recent_uploads %>
+								<%= link_to(image_tag(submission.image.url(:tiny)), user_profile_submission_url(@user.user_profile,submission)) %> 
+							<% end %>
+							<%= link_to('see them all', user_profile_submissions_url(@user.user_profile), :class => "all") unless @user.submissions.empty? %>
+						</p>
+					</div>
+				<% end %>
+				
+  			<div id="feedback">
+					<h2>
+						Feedback
+					</h2>
+					<div>
+						<h4>Hit us up</h4>
+						<p>
+							We’d love to hear your feedback on our site, our shirts, anything really.
+						</p>
+						<div id="feedback_form">
+							<% form_tag comments_url, { :id => 'user_feedback' } do -%>
+								<%= text_area_tag 'comment[message]', nil, :cols => 30, :rows => 12 %>
+								<%= hidden_field_tag 'comment[user_id]', @user.id %>
+								<%= submit_tag 'submit' %>
+							<% end %>
+							
+						</div>
+						<div id="feedback_confirmation" style="display:none;">
+							Roger that!
+						</div>
+						
+					</div>
+				</div>
+			<% end %>

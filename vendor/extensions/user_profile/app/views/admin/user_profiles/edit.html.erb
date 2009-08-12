@@ -1,0 +1,75 @@
+<%= error_messages_for :user_profile %>
+<h1>User Profile Edit</h1>
+<br/>
+<% form_for(:user_profile, :url => object_url, :html => { :method => :put, :multipart => true }) do |profile_form| %>
+  <%#= render :partial => "form", :locals => { :f => f } %>
+	
+	
+	    <p>
+	  		<label for="<%= t("name") %>"><%= t("name") %></label><br />
+	  		<%= profile_form.text_field :name, :class => 'title' -%>
+	  	</p>
+			<p>
+	  		<label for="<%= t("firstname") %>"><%= t("firstname") %></label><br />
+	  		<%= profile_form.text_field :firstname, :class => 'title' -%>
+	  	</p>
+			<p>
+	  		<label for="<%= t("lastname") %>"><%= t("lastname") %></label><br />
+	  		<%= profile_form.text_field :lastname, :class => 'title' -%>
+	  	</p>
+			<p>
+	  		<label for="<%= t("gender") %>"><%= t("gender") %></label><br />
+	  		<%= profile_form.select :gender, %w(male female), :include_blank => true -%>
+	  	</p>
+	  	<p>
+	  		<label for="<%= t("random_blurb") %>"><%= t("random_blurb") %></label><br />
+	  		<%= profile_form.text_field :blurb, :class => 'title' -%>
+	  	</p>
+			<p>
+	  		<label for="<%= t("website") %>"><%= t("website") %></label><br />
+	  		<%= profile_form.text_field :website, :class => 'title' -%>
+	  	</p>
+			
+			<p>
+	  		<label for="<%= t("hometown") %>"><%= t("hometown") %></label><br />
+	  		<%= profile_form.text_field :hometown, :class => 'title' -%>
+	  	</p>
+			<p>
+	  		<label for="<%= t("birthday") %>"><%= t("birthday") %></label><br />
+	  		<%= profile_form.date_select(:birthday, { :start_year => Time.now.year - 60, :include_blank => true }, :class => 'title') -%>
+	  	</p>
+			<p>
+	  		<label for="<%= t("fav_band") %>"><%= t("fav_band") %></label><br />
+	  		<%= profile_form.text_field :favorite_band, :class => 'title' -%>
+	  	</p>
+			<p>
+	  		<label for="<%= t("best_song") %>"><%= t("best_song") %></label><br />
+	  		<%= profile_form.text_field :favorite_song, :class => 'title' -%>
+	  	</p>
+			<p>
+	  		<label for="<%= t("save_the_world") %>"><%= t("save_the_world") %></label><br />
+	  		<%= profile_form.text_field :save_the_world_plan, :class => 'title' -%>
+	  	</p>
+			<p>
+	  		<label for="<%= t("avatar") %>"><%= t("avatar") %></label><br />
+	  		<%= profile_form.file_field :avatar, :class => 'title' -%>
+	  	</p>
+				<p>
+		  		<label for="active">Active?</label><br />
+		  		<%= profile_form.check_box :active, :class => 'title' -%>
+		  	</p>
+				<p>
+		  		<label for="is_art_gallery_member">Flag as Art Gallery?</label><br />
+		  		<%= profile_form.check_box :is_art_gallery_member, :class => 'title' -%>
+		  	</p>
+		
+				<p>
+		  		<label for="photo_gallery_intro">Photo Gallery Intro?</label><br />
+		  		<%= profile_form.text_area :photo_gallery_intro, :class => 'title' -%>
+		  	</p>
+			
+	
+  <p>
+    <%=submit_tag t("update") %>
+  </p>
+<% end %>

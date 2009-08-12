@@ -1,0 +1,10 @@
+<% f.fields_for :user_profile_attributes do |profile_form| %>
+   <p>
+  		<label for="<%= t("name") %>"><%= t("name") %></label><br />
+  		<%= profile_form.text_field :name, :class => 'title' -%>
+  	</p>
+  	<p>
+  		<label for="<%= t("random_blurb") %>"><%= t("random_blurb") %></label><br />
+  		<%= profile_form.text_field :blurb, :class => 'title' -%>
+  	</p>
+<% end %>

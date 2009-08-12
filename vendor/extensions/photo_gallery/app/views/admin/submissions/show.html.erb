@@ -1,0 +1,12 @@
+<h1>Showing <%= @submission.product.name %></h1>
+
+<p>By: <%= @submission.user.user_profile.name %></p>
+
+<p>Blub: <%=h @submission.blurb %></p>
+
+<p><%= image_tag @submission.image.url(:large) %></p>
+
+
+<%= link_to "Back", collection_url %>
+
+

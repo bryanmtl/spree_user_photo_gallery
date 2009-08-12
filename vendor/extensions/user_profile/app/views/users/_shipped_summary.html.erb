@@ -1,0 +1,22 @@
+<% unless orders.empty? %>
+	<table class="order-summary" cellpadding="0" cellspacing="0">
+		<tbody>
+		<% orders.each do |order| %>
+		  <tr class="<%= cycle('even', 'odd') %>">
+		    
+			  <td><%= link_to order.number, order_url(order) %></td>
+		    <td class="label"><%= t("order_date") %></td>
+			  <td><%=order.created_at.to_date%></td>
+			  <td class="label"><%= t("ship_date") %></td>
+		    <td><%= order.shipment.shipped_at.to_date %></td>
+				<td class="label"><%= t("tracking_number") %></td>
+		    <td><%= "#{order.shipment.tracking}  (#{order.shipment.shipping_method.name rescue ''})" %></td>
+		    
+				
+		  </tr>
+		<% end %>
+		</tbody>
+	</table>
+<% else %>
+ <p>You haven't got any relevant orders to display</p>
+<% end %>

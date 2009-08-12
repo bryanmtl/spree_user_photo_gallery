@@ -1,0 +1,27 @@
+
+<table class="admin-report" width="545">
+  <tr>
+    <td valign="top">Product:</td>
+    <td><%= f.select :product_id, Product.active.collect { |p| [p.name, p.id] } %></td>
+  </tr>
+
+	<tr>
+    <td valign="top">User:</td>
+    <td><%= f.select :user_id, UserProfile.all.collect { |u| [u.name, u.user_id] } %></td>
+  </tr>
+	<tr>
+    <td valign="top">Blurb:</td>
+    <td><%= f.text_area :blurb %></td>
+  </tr>
+	
+  <tr>
+    <td valign="top">Active ?:</td>
+    <td><%= f.check_box :active %></td>
+  </tr>
+
+	<tr>
+    <td valign="top">Image:</td>
+    <td><%= f.file_field :image %> </td>
+  </tr>
+	
+</table>

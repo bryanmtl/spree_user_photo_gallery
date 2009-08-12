@@ -1,0 +1,25 @@
+<% content_for :sidebar_left do %>
+	<%= render :partial => "shared/bands_sidebar",  :locals => { :products => @products, :taxon => @taxon } %>
+<% end %>
+<div class="upload_form">
+	<h1>Upload Your Image</h1>
+	<h2>Upload Your Photos and Artwork to the YBP Gallery.</h2>
+	<p>Since we started in ‘06, Yellow Bird Peeps have been emailing us pics and artwork unprompted. Inspired by the support and enthusiasm for YBP, we decided to dedicate a cozy little corner of our site to just such imagery. Upload your stuff now and show Yellow Bird Project some love.
+	</p>
+	<p>If you want to upload a photo of you in your Yellow Bird Project shirt, here’s what we recommend: Just take a photo of yourself wearing your Yellow Bird Project shirt, keeping in mind that the art on the shirt must be at least 3/4 visible in the photo and your photo will be cropped. Done? Now just follow the steps below…</p>
+
+<div class="generic_form">
+	<%= error_messages_for :submission %>
+
+	<% form_for(:submission, :url => collection_url, :html => { :multipart => true }) do |f| %>
+	  <%= render :partial => "form", :locals => { :f => f } %>
+	  <p class="submit">
+	    <%= submit_tag t("upload") %> or <%= link_to t("cancel"), collection_url %>
+	  </p>
+	<% end %>
+</div>
+</div>
+<% content_for :sidebar_right do %>
+
+	<%= render :partial => 'shared/dynamic_sidebars' %>
+<% end %>

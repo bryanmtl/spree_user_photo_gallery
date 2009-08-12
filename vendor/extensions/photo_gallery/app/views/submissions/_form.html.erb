@@ -1,0 +1,28 @@
+
+<table class="admin-report" width="545">
+	<tr>
+    <td valign="top">Which Shirt?:</td>
+    <td><%#= f.select :product_id, Product.active.collect { |p| [p.name, p.id] } %>
+				<select name="submission[product_id]">
+					<option value="">no shirt, just fun!</option>
+					<% if params[:product_id] %>
+						<%= options_from_collection_for_select(Product.active, 'id', 'name', Product.find_by_permalink(params[:product_id]).id ) %>
+					<% else %>
+						<%= options_from_collection_for_select(Product.active, 'id', 'name') %>
+					<% end %>
+				</select>	
+			</td>	
+  </tr>
+	<tr>
+    <td valign="top">Description:</td>
+    <td><%= f.text_area :blurb %></td>
+  </tr>
+	
+
+	<tr>
+    <td valign="top">Image:</td>
+    <td><%= f.file_field :image %> </td>
+  </tr>
+	
+	<%= hidden_field_tag 'submission[user_id]', current_user.id %>
+</table>

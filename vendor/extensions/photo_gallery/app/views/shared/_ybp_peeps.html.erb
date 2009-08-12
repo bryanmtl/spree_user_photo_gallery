@@ -1,0 +1,7 @@
+<div id="peeps">
+	<% for peep in User.popular_peeps %>
+		  <%= link_to(image_tag(peep.user_profile.avatar.url(:thumb)), user_profile_submissions_url(peep.user_profile)) if peep.user_profile %>
+	<% end %>
+</div>
+
+

@@ -1,0 +1,8 @@
+<div id="most_recent">
+
+	<% for submission in Submission.most_recent %>
+		<%= link_to(image_tag(submission.image.url(:tiny)), submission) %> 
+	<% end %>
+	<br />
+	<%= link_to('see them all', submissions_url) %>
+</div>
